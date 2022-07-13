@@ -11,7 +11,7 @@ import {
   where,
 } from "firebase/firestore";
 
-export const CardView = () => {
+export const CardView = (props) => {
   const [rollno, fetchedRollno] = useState("8947");
   const [admno, setAdmnno] = useState("??");
   const [name, setName] = useState("??");
@@ -20,6 +20,11 @@ export const CardView = () => {
   const [card3, setCard3] = useState("??");
   const [imgList, setImgList] = useState([]);
   const userRef = collection(db, "users");
+  console.log(props.scanResultWebCam)
+  const [currNo, setCurrNo] = useState("8947");
+
+
+
 
   // const q = query(userRef, where());
   useEffect(() => {
@@ -47,6 +52,7 @@ export const CardView = () => {
       setImgList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
       // console.log(imgList);
     };
+    setCurrNo(props.scanResultWebCam)
 
     getUserList();
   }, []);
@@ -76,9 +82,13 @@ export const CardView = () => {
 
             {imgList.map((item) => {
               console.log("ITEM LOGGED IS ", item);
+              console.log(props.scanResultWebCam)
+              
+
+              
               // console.log("inside function");
               //REPLACE 8947 WITH THE INT VALUE OBTAINED FROM QR CODE.
-              if (item.admno == 1234)
+              if (item.admno == props.scanResultWebCam)
                 return (
                   <AddWidget
                     key={item.id}
@@ -89,7 +99,11 @@ export const CardView = () => {
                     card3={item.card3}
                   />
                 );
-            })}
+         
+            }
+            
+            
+            )}
 
             {/* <div className="flex flex-row justify-between items-center space-x-16">
               <p>CARD 1: AVAILABLE</p>

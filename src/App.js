@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import QrReader from 'react-qr-reader';
-
+import {CardView} from './pages/CardView'
 
 function App() { 
 
@@ -14,7 +14,7 @@ function App() {
   const handleScanWebCam = (result) => {
     if (result){
         setScanResultWebCam(result.substr(58,4));
-        console.log(result)
+        console.log(result);
     }
    }
   return (
@@ -26,6 +26,7 @@ function App() {
     onScan={handleScanWebCam}
     />
     <h1>You college ID: {scanResultWebCam}</h1>
+    <CardView scanResultWebCam={scanResultWebCam}/>
 </>
   );
 }
