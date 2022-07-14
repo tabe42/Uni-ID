@@ -1,11 +1,23 @@
 import React, {useState} from 'react';
 import QrReader from 'react-qr-reader';
-import {CardView} from './pages/CardView'
+import {CardView} from './pages/CardView' 
+import {Attendence} from './pages/Attendence' 
 
 function App() { 
 
   const [scanResultWebCam, setScanResultWebCam] =  useState('');
-
+  const [currentFunction, setCurrentFunction] =  useState('1');
+  
+  const handleClickLibrary = (error) => {
+    setCurrentFunction('Lib');
+  }  
+  const handleClickCafeteria = (error) => {
+    setCurrentFunction('Caf');
+    
+  } 
+  const handleClickAttendence = (error) => {
+    setCurrentFunction('Att');
+  }  
 
 
   const handleErrorWebCam = (error) => {
@@ -19,14 +31,35 @@ function App() {
    }
   return (
 <>
-    <QrReader
-    delay={300}
-    style={{width: '50%'}}
-    onError={handleErrorWebCam}
-    onScan={handleScanWebCam}
-    />
-    <h1>You college ID: {scanResultWebCam}</h1>
-    <CardView scanResultWebCam={scanResultWebCam}/>
+    {scanResultWebCam==''?
+  <QrReader
+  delay={300}
+  style={{width: '50%'}}
+  onError={handleErrorWebCam}
+  onScan={handleScanWebCam}
+  />:<>
+  {(currentFunction=='1')?
+  <div>
+    <div className="flex flex-col items-center h-screen">
+      <p className="text-green-500 text-[64px] my-4 mt-10 font-semibold">WELCOME : {scanResultWebCam}</p>
+      <div className="m-auto text-2xl">
+        <div className="bg-green-500 p-8 text-white rounded-md shadow-md">
+          <div className="flex flex-row bg-green-500 items-center justify-center space-x-8">
+            <button className='flex p-10 px-16 bg-green-400 rounded-md shadow-md' onClick={handleClickLibrary}>Library</button>
+            <button className='flex p-10 px-16 bg-green-400 rounded-md shadow-md' onClick={handleClickAttendence}>Attendence</button>
+            <button className='flex p-10 px-16 bg-green-400 rounded-md shadow-md' onClick={handleClickCafeteria}>Cafeteria</button>
+          </div>
+          <div className="bg-green-400 rounded-md mt-8 p-8 text-center">
+            CHOOSE FUNCTION
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>:<>
+  {currentFunction=='Lib'?<CardView scanResultWebCam={scanResultWebCam}/>:<Attendence />}
+  </>}
+</>
+}
 </>
   );
 }
