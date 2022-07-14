@@ -13,22 +13,24 @@ import {
 import { RepeatRounded } from "@material-ui/icons";
 
 export const CardView = (props) => {
- 
-  const [found,setFound]=useState(false)
+  const [found, setFound] = useState(false);
   const [imgList, setImgList] = useState([]);
   const userRef = collection(db, "users");
-  console.log(props.scanResultWebCam)
-
-
+  console.log(props.scanResultWebCam);
 
   const addItem = async () => {
-    await addDoc(userRef, {admno:props.scanResultWebCam,card1:"available",card2:"available",card3:"available",name:"test"});
+    await addDoc(userRef, {
+      admno: props.scanResultWebCam,
+      card1: "available",
+      card2: "available",
+      card3: "available",
+      name: "test",
+    });
     console.log("reading");
-      const data = await getDocs(userRef);
-      console.log('datalogged is',data);
-      // console.log("image data", data);
-      setImgList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-      
+    const data = await getDocs(userRef);
+    console.log("datalogged is", data);
+    // console.log("image data", data);
+    setImgList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
 
   // const q = query(userRef, where());
@@ -50,49 +52,63 @@ export const CardView = (props) => {
     // getDoc(userRef2).then((doc) => {
     //   console.log(doc.data(), doc.id);
     // });
-    const checkIfExists=()=>{
-
-    }
+    const checkIfExists = () => {};
 
     const getUserList = async () => {
+      const found2 = false;
       console.log("reading");
-  const userRef2 = collection(db, "users");
+      const userRef2 = collection(db, "users");
 
       const data2 = await getDocs(userRef2);
-      console.log('datalogged is',data2);
+      console.log("datalogged is", data2);
       console.log("image data", data2);
-       setImgList(data2.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-      console.log(imgList)
-      imgList.map((item)=>{
-        if (item.admno == props.scanResultWebCam)
-       {  console.log(props.scanResultWebCam,'and',item.admno,'found st to true')
-          setFound(true);
+      const myNewList = data2.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      console.log(myNewList);
+      myNewList.map((item) => {
+        if (item.admno == props.scanResultWebCam) {
+          console.log(
+            props.scanResultWebCam,
+            "and",
+            item.admno,
+            "found st to true"
+          );
+          found2 = true;
+        }
+
+        // }
+
+        // )
+        //   if(found==false){
+        //     console.log('calling adddoc inside useeffect')
+        // await addDoc(userRef, {admno:props.scanResultWebCam,card1:"available",card2:"available",card3:"available",name:"test"});
+
+        //   }
+        // console.log(imgList);
+      });
+      if (found2 == false) {
+        console.log("calling adddoc inside useeffect");
+        await addDoc(userRef, {
+          admno: props.scanResultWebCam,
+          card1: "available",
+          card2: "available",
+          card3: "available",
+          name: "test",
+        });
+
+        console.log("console log inside found==false statement", imgList);
       }
 
+      setImgList(myNewList);
+    };
 
-      // }
-      
-      // )
-    //   if(found==false){
-    //     console.log('calling adddoc inside useeffect')
-    // await addDoc(userRef, {admno:props.scanResultWebCam,card1:"available",card2:"available",card3:"available",name:"test"});
-        
-    //   }
-      // console.log(imgList);
-    })
-      if(found==false){
-        console.log('calling adddoc inside useeffect')
-    await addDoc(userRef, {admno:props.scanResultWebCam,card1:"available",card2:"available",card3:"available",name:"test"});
-    
-    console.log('console log inside found==false statement',imgList)
-  }
-}
-    
     // fetchedRollno(props.scanResultWebCam);
     // setCurrNo(props.scanResultWebCam)
 
     getUserList();
-  },[]);
+  }, []);
 
   // const userRef = collection(db, "users");
   // useEffect(() => {
@@ -119,14 +135,11 @@ export const CardView = (props) => {
 
             {imgList.map((item) => {
               console.log("ITEM LOGGED IS ", item);
-              console.log(props.scanResultWebCam)
-              
+              console.log(props.scanResultWebCam);
 
-              
               // console.log("inside function");
               //REPLACE 8947 WITH THE INT VALUE OBTAINED FROM QR CODE.
-              if (item.admno == props.scanResultWebCam)
-              {
+              if (item.admno == props.scanResultWebCam) {
                 return (
                   <AddWidget
                     key={item.id}
@@ -137,21 +150,8 @@ export const CardView = (props) => {
                     card3={item.card3}
                   />
                 );
-                }
-                
-         
-            }
-
-          
-            
-            
-            )
-
-            
-
-
-
-            }
+              }
+            })}
 
             {/* <div className="flex flex-row justify-bsetween items-center space-x-16">
               <p>CARD 1: AVAILABLE</p>
